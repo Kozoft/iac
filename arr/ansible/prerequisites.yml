@@ -1,0 +1,28 @@
+---
+- name: Install prereq and "media" group
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update system.
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: full
+
+    - name: Install required prerequisite packages.
+      ansible.builtin.apt:
+        name:
+          - curl
+          - sqlite3
+          - mediainfo
+          - libchromaprint-tools
+          - apt-transport-https
+          - dirmngr
+          - gnupg
+          - ca-certificates
+        state: present
+
+    - name: Create "media" group
+      ansible.builtin.group:
+        name: media
+        state: present

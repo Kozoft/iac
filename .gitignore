@@ -1,0 +1,5 @@
+Kubernetes Cluster
+.vagrant*
+vagrant-kubeadm-kubernetes
+arr/ansible/gitea.yml
+arr/service/gitea.service

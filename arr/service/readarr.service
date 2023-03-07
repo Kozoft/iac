@@ -1,0 +1,14 @@
+[Unit]
+Description=Readarr Daemon
+After=syslog.target network.target
+[Service]
+User=readarr
+Group=media
+Type=simple
+
+ExecStart=/opt/Readarr/Readarr -nobrowser -data=/var/lib/readarr/
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

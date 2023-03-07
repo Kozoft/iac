@@ -1,0 +1,62 @@
+---
+- name: Install sonarr
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Mono repo key (sonarr)
+      ansible.builtin.command: apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+      register: result
+      changed_when: result.rc != 0
+
+    - name: Mono repo (sonarr)
+      ansible.builtin.shell: |
+        set -o pipefail
+        echo "deb https://download.mono-project.com/repo/debian stable-buster main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+      register: result
+      changed_when: result.rc != 0
+      args:
+        executable: /bin/bash
+
+    - name: Update with mono repo (sonarr)
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Download mediainfo repo info (sonarr)
+      ansible.builtin.get_url:
+        url: https://mediaarea.net/repo/deb/repo-mediaarea_1.0-21_all.deb
+        dest: /home/vagrant/
+        mode: '0644'
+
+    - name: Install mediainfo repo (sonarr)
+      ansible.builtin.command: dpkg -i repo-mediaarea_1.0-21_all.deb
+      register: result
+      changed_when: result.rc != 0
+
+    - name: Update with mediainfo (sonarr)
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Repo key (sonarr)
+      ansible.builtin.command: apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 2009837CBFFD68F45BC180471F4F90DE2A9B4BF8
+      register: result
+      changed_when: result.rc != 0
+
+    - name: Repo (sonarr)
+      ansible.builtin.shell: |
+        set -o pipefail
+        echo "deb https://apt.sonarr.tv/debian buster main" | sudo tee /etc/apt/sources.list.d/sonarr.list
+      register: result
+      changed_when: result.rc != 0
+      args:
+        executable: /bin/bash
+
+    - name: Install (sonarr)
+      ansible.builtin.apt:
+        update_cache: true
+        name:
+          - sonarr
+        state: present
+
+    - name: Cleanup (sonarr)
+      ansible.builtin.command: rm repo-mediaarea_1.0-21_all.deb

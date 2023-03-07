@@ -1,0 +1,14 @@
+[Unit]
+Description=Whisparr Daemon
+After=syslog.target network.target
+[Service]
+User=whisparr
+Group=media
+Type=simple
+
+ExecStart=/opt/Whisparr/Whisparr -nobrowser -data=/var/lib/whisparr/
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

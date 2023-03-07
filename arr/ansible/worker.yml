@@ -1,0 +1,77 @@
+---
+- name: Install {{ item.lwr }}
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Debug ({{ item.lwr }}) variables
+      debug:
+        msg: "lwr = {{ item.lwr }}; upr = {{ item.upr }}; branch = {{ item.branch }}"
+
+    - name: Create group ({{ item.lwr }})
+      ansible.builtin.group:
+        name: "{{ item.lwr }}"
+        state: present
+    
+    - name: Create user ({{ item.lwr }})
+      ansible.builtin.user:
+        name: "{{ item.lwr }}"
+        groups: "{{ item.lwr }},media"
+    
+    - name: Data dir ({{ item.lwr }})
+      ansible.builtin.file:
+        path: "/var/lib/{{ item.lwr }}"
+        state: directory
+        recurse: true
+        owner: "{{ item.lwr }}"
+        group: "{{ item.lwr }}"
+    
+    - name: Download distr ({{ item.lwr }})
+      ansible.builtin.command: >
+        wget --content-disposition 
+        "http://{{ item.lwr }}.servarr.com/v1/update/{{ item.branch }}/updatefile?os=linux&runtime=netcore&arch=x64"
+      register: result
+      changed_when: result.rc != 0
+    
+    #- debug:
+    #    msg: "Result {{ result }}"
+    
+    - name: Extract distr ({{ item.lwr }})
+      ansible.builtin.shell: "tar -xvzf {{ item.upr }}*.linux*.tar.gz"
+      register: result
+      changed_when: result.rc != 0
+    
+    - name: Move it in place ({{ item.lwr }})
+      ansible.builtin.command: "mv {{ item.upr }} /opt/"
+      register: result
+      changed_when: result.rc != 0
+    
+    - name: Install {{ item.upr }}
+      ansible.builtin.file:
+        path: /opt/{{ item.upr }}
+        state: directory
+        recurse: true
+        owner: "{{ item.lwr }}"
+        group: "{{ item.lwr }}"
+    
+    - name: Copy service script ({{ item.lwr }})
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: 0644
+      with_items:
+        - src: "{{ item.lwr }}.service"
+          dest: "/etc/systemd/system/{{ item.lwr }}.service"
+    
+    - name: Make a service ({{ item.lwr }})
+      ansible.builtin.service:
+        name: "{{ item.lwr }}"
+        state: started
+        enabled: true
+    
+    - name: Cleanup ({{ item.lwr }})
+      ansible.builtin.shell: "rm {{ item.upr }}*.linux*.tar.gz"
+      register: result
+      changed_when: result.rc != 0

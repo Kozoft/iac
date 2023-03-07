@@ -1,0 +1,14 @@
+---
+- name: Install
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: install 4 all
+      include_tasks: worker.yml
+      loop:
+        - { 'lwr': 'radarr', 'upr': 'Radarr', 'branch': 'master'}
+        - { 'lwr': 'lidarr', 'upr': 'Lidarr', 'branch': 'master'}
+        - { 'lwr': 'prowlarr', 'upr': 'Prowlarr', 'branch': 'master'}
+        - { 'lwr': 'readarr', 'upr': 'Readarr', 'branch': 'develop'}
+        - { 'lwr': 'whisparr', 'upr': 'Whisparr', 'branch': 'nightly'}
