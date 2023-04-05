@@ -17,18 +17,19 @@ resource "azurerm_linux_virtual_machine" "entrance" {
   resource_group_name = azurerm_resource_group.dev.name
   location            = azurerm_resource_group.dev.location
   size                = "Standard_D2s_v3"
-  admin_username      = "adminuser"
+  admin_username      = "toor"
+  disable_password_authentication = true
   network_interface_ids = [
     azurerm_network_interface.entrance.id,
   ]
 
   admin_ssh_key {
-    username   = "bornik"
+    username   = "toor"
     public_key = file("/Volumes/Debian/VMs/IaC/azureTerraform/bornik")
   }
 
   admin_ssh_key {
-    username   = "alebar"
+    username   = "toor"
     public_key = file("~/.ssh/id_rsa.pub")
   }
 
