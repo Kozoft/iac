@@ -16,7 +16,7 @@ resource "azurerm_linux_virtual_machine" "entrance" {
   name                = "entrance-vm"
   resource_group_name = azurerm_resource_group.dev.name
   location            = azurerm_resource_group.dev.location
-  size                = "Standard_F2"
+  size                = "Standard_D2s_v3"
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.entrance.id,
