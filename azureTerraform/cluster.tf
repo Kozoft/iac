@@ -7,6 +7,7 @@ resource "azurerm_kubernetes_cluster" "dev" {
   dns_prefix          = "dev"
   kubernetes_version = "1.25.5"
   private_cluster_enabled = true
+  public_network_access_enabled = false
 
   default_node_pool {
     name       = "defaultnp"
@@ -23,6 +24,8 @@ resource "azurerm_kubernetes_cluster" "dev" {
   network_profile {
     network_plugin    = "kubenet"
     load_balancer_sku = "standard"
+    service_cidr      = "10.0.2.0/24"
+    dns_service_ip    = "10.0.2.10"
   }
 
   tags = {
