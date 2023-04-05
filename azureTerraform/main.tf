@@ -18,8 +18,8 @@ provider "azurerm" {
       prevent_deletion_if_contains_resources = true
     }
 
-# azurerm_linux_virtual_machine
-# azurerm_windows_virtual_machin
+    # azurerm_linux_virtual_machine
+    # azurerm_windows_virtual_machin
     virtual_machine {
       delete_os_disk_on_deletion     = true
       graceful_shutdown              = false
