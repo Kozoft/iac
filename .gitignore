@@ -3,3 +3,5 @@ Kubernetes Cluster
 vagrant-kubeadm-kubernetes
 arr/ansible/gitea.yml
 arr/service/gitea.service
+azureTerraform/info.txt
+azureTerraform/bornik
