@@ -25,12 +25,12 @@ resource "azurerm_linux_virtual_machine" "entrance" {
 
   admin_ssh_key {
     username   = "toor"
-    public_key = file("/Volumes/Debian/VMs/IaC/azureTerraform/bornik")
+    public_key = file("${path.root}/bornik")
   }
 
   admin_ssh_key {
     username   = "toor"
-    public_key = file("~/.ssh/id_rsa.pub")
+    public_key = file("${path.root}/id_rsa.pub")
   }
 
   os_disk {

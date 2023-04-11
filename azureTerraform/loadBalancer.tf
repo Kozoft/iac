@@ -24,6 +24,7 @@ resource "azurerm_lb_probe" "dev" {
   loadbalancer_id = azurerm_lb.dev.id
   name            = "ssh-running-probe"
   port            = 22
+  number_of_probes = 1
 }
 
 resource "azurerm_lb_rule" "dev" {
@@ -33,6 +34,8 @@ resource "azurerm_lb_rule" "dev" {
   frontend_port                  = 22
   backend_port                   = 22
   frontend_ip_configuration_name = "PublicIPAddress"
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.dev.id]
+  probe_id                       = azurerm_lb_probe.dev.id
 }
 
 resource "azurerm_lb_backend_address_pool" "dev" {
