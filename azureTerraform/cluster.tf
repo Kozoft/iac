@@ -15,6 +15,8 @@ resource "azurerm_kubernetes_cluster" "dev" {
     vm_size              = "Standard_DS2_v2"
     orchestrator_version = "1.25.5"
     vnet_subnet_id       = azurerm_subnet.dev.id
+    os_disk_type         = "Ephemeral"
+    os_disk_size_gb      = 60
   }
 
   identity {
@@ -22,7 +24,9 @@ resource "azurerm_kubernetes_cluster" "dev" {
   }
 
   network_profile {
-    network_plugin    = "kubenet"
+    #upstream dns 168.63.129.16
+    #docker-bridge-address 172.17.0.1/16
+    network_plugin    = "azure"
     load_balancer_sku = "standard"
     service_cidr      = "10.0.2.0/24"
     dns_service_ip    = "10.0.2.10"
